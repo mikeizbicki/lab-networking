@@ -69,12 +69,12 @@ But now visit the same url <http://10.253.1.15:5000> in firefox on your laptop.
 You should get an error about being unable to connect.
 This webpage is internal to the CMC network, and IT has created firewall rules that prevent outsiders from viewing it.
 
-<!--
 > **Aside:**
-> The GNU website maintains lists of malware-like behaviour for [Google here](https://www.gnu.org/proprietary/malware-google.en.html) and for [Apple here](https://www.gnu.org/proprietary/malware-apple.en.html).
-> Google and Apple software censor what you can see online, spy on the websites you visit, report "bad" websites to authoritarian governments, and provide backdoors for other people to use your computer.
-> Firefox does not have these problems.
--->
+> The GNU Project argues that Google Chrome and Apple Safari are malware.
+> Google and Apple censor what you can see online, spy on the websites you visit, report "bad" websites to authoritarian governments, and provide backdoors for other people to use your computer.
+> GNU maintains a [detailed list of infractions for Google here](https://www.gnu.org/proprietary/malware-google.en.html) and for [Apple here](https://www.gnu.org/proprietary/malware-apple.en.html).
+> For this reason, I use firefox to browse the web.
+> I also recommend the [ublockorigin](https://ublockorigin.com/) adblocker.
 
 Before we learn how to bypass this firewall, it will be useful to review some basic networking.
 In the url above, 
