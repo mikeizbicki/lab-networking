@@ -31,7 +31,7 @@ and so you may be tempted to ask why would anyone do it?
 The simplest answer is that many people must use command line web browsers due to physical disability.
 For example, the famous physicist Stephen Hawking had [Lou Gehrig's disease](https://en.wikipedia.org/wiki/Motor_neurone_disease).
 
-<img src=hawking.webp width=400px />
+<img src=img/hawking.webp width=400px />
 
 He could not use a mouse,
 and so could not use a traditional web browser to browse the internet,
@@ -78,11 +78,21 @@ This webpage is internal to the CMC network, and IT has created firewall rules t
 
 Before we learn how to bypass this firewall, it will be useful to review some basic networking.
 In the url above, 
-the `10.253.1.15` is called an *IP address*,
+the `http://` is called the *scheme*,
+and this identifies that you are connecting to a webserver (and not, e.g. a ssh server).
+The `10.253.1.15` is called an *IP address*,
 and this identifies which computer we are connecting to.
 The `:5000` is a *port*,
 and every computer has 65536 (i.e. $2^{16}$) ports that it can listen for connections on.
 
+> **Aside:**
+> You may never have seen a url with a port specification before.
+> This is because all schemes have default ports associated with them,
+> and if a service is hosted on the default port,
+> then no port is needed.
+> The default port for http is 80, and so the url `http://google.com` is equivalent to `http://google.com:80`.
+
+An IP address can host many different webservers as long as each uses a different port.
 Another webserver is listening on port 5001 of the same IP address.
 You can access it by running
 ```
@@ -94,7 +104,7 @@ And you will be greeted with an "Hola Mundo" message.
 
 [Port forwarding](https://en.wikipedia.org/wiki/Port_forwarding) is a way to connect to ports (and thus webpages) hidden behind a firewall.
 It is commonly used to bypass the [Great Firewall of China](https://en.wikipedia.org/wiki/Great_Firewall) and other forms of censorship.
-We will use it in order to view the webpage <http://10.253.1.15:5000> directly on our laptop in firefox.
+You will use it in order to view the webpage <http://10.253.1.15:5000> directly on your laptop in firefox.
 
 You enable port forwarding by modifying the `ssh` command you use to connect to the lambda server.
 Log out, then re-login with the command
@@ -141,6 +151,13 @@ GET /
 ```
 is the HTTP command for fetching the root webpage of the server.
 The `localhost 5000` means that netcat will connect to the current computer at port 5000.
+
+> **Note:**
+> `localhost` is a special *hostname*, which is like a shortcut for an IP address.
+> `localhost` always refers to the IP address of the machine that you are currently on.
+> When you are using firefox on your laptop, `localhost` will refer to your laptop.
+> When you are in a shell session on the lambda server, `localhost` will refer to the lambda server.
+> Internally to the VPN, the lambda server's IP address is `10.253.1.15`, and so the `netcat localhost 5000` command is equivalent to `netcat 10.253.1.15 5000`.
 
 To create a server, you will make netcat listen on a port with the `-l` flag.
 Try running the command
@@ -221,6 +238,18 @@ Start the server.
 $ chmod u+x server.sh
 $ ./server.sh
 ```
+
+> **Note:**
+> Some web browsers may not render your `index.html` file properly because your web server above does not send the proper HTTP headers stating that the document is HTML and not plain text.
+> You can get it to render correctly by using the following variation:
+> ```
+> netcat -q1 -l localhost $UID <<EOF
+> HTTP/1.1 200 OK
+> Content-Type: text/html
+> 
+> $(cat index.html)
+> EOF
+> ```
 
 ## Submission
 

@@ -1,0 +1,21 @@
+127.0.0.1 - - [10/Feb/2025 14:05:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Feb/2025 14:05:20] code 404, message File not found
+127.0.0.1 - - [10/Feb/2025 14:05:20] "GET /background.gif HTTP/1.1" 404 -
+127.0.0.1 - - [10/Feb/2025 14:05:20] code 404, message File not found
+127.0.0.1 - - [10/Feb/2025 14:05:20] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [10/Feb/2025 14:05:21] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Feb/2025 14:05:21] code 404, message File not found
+127.0.0.1 - - [10/Feb/2025 14:05:21] "GET /background.gif HTTP/1.1" 404 -
+127.0.0.1 - - [10/Feb/2025 14:05:21] code 404, message File not found
+127.0.0.1 - - [10/Feb/2025 14:05:21] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [10/Feb/2025 14:05:27] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Feb/2025 14:06:09] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [10/Feb/2025 14:06:09] "GET /rickroll-roll.gif HTTP/1.1" 200 -
+127.0.0.1 - - [10/Feb/2025 14:06:09] code 404, message File not found
+127.0.0.1 - - [10/Feb/2025 14:06:09] "GET /favicon.ico HTTP/1.1" 404 -
+10.253.1.15 - - [10/Feb/2025 14:14:51] "GET / HTTP/1.1" 200 -
+10.253.1.15 - - [10/Feb/2025 14:15:48] "GET / HTTP/1.1" 200 -
+10.253.1.15 - - [10/Feb/2025 14:15:48] "GET /rickroll-roll.gif HTTP/1.1" 304 -
+10.253.1.15 - - [10/Feb/2025 14:15:48] code 404, message File not found
+10.253.1.15 - - [10/Feb/2025 14:15:48] "GET /favicon.ico HTTP/1.1" 404 -
+10.253.1.15 - - [10/Feb/2025 14:30:33] "GET /" 200 -
