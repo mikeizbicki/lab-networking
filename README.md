@@ -224,14 +224,31 @@ Create another file `server.sh` with the following contents.
 ```
 #!/bin/sh
 while true; do
-    cat index.html | netcat -q1 -l localhost $UID
+    cat index.html | netcat -q1 -l 0.0.0.0 $UID
     echo "index.html served"
 done
 ```
-(The `-q1` in the `netcat` command causes netcat to close the connection after one second.
-Modern web browsers maintain the connection open and send followup commands,
-but our very simple web browser doesn't know how to deal with this.
-So we just close the connection instead.)
+
+> **Note:**
+> The `-q1` in the `netcat` command causes netcat to close the connection after one second.
+> Modern web browsers maintain the connection open and send followup commands,
+> but our very simple web browser doesn't know how to deal with this.
+> So we just close the connection instead.
+
+> **Note:**
+> Depending on how you create/run the `server.sh` file above,
+> you may get error messages that look something like
+> ```
+> netcat: getaddrinfo: Servname not supported for ai_socktype
+> ```
+> These are caused by the `UID` variable being undefined in the context of the dash shell you are using (and so variable substitution results in an empty variable being inserted and no port being specified to the `netcat` command).
+> The `UID` variable is not a POSIX standard, and exists only in bash.
+> If you either: (1) use bash or (2) manually substitute the UID value, then this should resolve the error.
+
+> **Note:**
+> Notice that the `netcat` command above uses `0.0.0.0` instead of `localhost` as the location the webserver will run from.
+> This enables remote connections to the webserver through port forwarding.
+> You can see [this stackoverflow link](https://superuser.com/questions/949428/whats-the-difference-between-127-0-0-1-and-0-0-0-0) for details on the difference between these two addresses.
 
 Start the server.
 ```
@@ -241,9 +258,9 @@ $ ./server.sh
 
 > **Note:**
 > Some web browsers may not render your `index.html` file properly because your web server above does not send the proper HTTP headers stating that the document is HTML and not plain text.
-> You can get it to render correctly by using the following variation:
+> You can get it to render correctly by using the following variation of the `netcat` command in your script:
 > ```
-> netcat -q1 -l localhost $UID <<EOF
+> netcat -q1 -l 0.0.0.0 $UID <<EOF
 > HTTP/1.1 200 OK
 > Content-Type: text/html
 > 
