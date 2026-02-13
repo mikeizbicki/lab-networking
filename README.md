@@ -256,4 +256,4 @@ Take a screenshot, and upload to canvas.
 
 (And try not to go insane.)
 
-<img src=img/frustrate.jpg width=300px />
+<img src=img/frustrate.jpg width=200px />
