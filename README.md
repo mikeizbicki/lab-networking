@@ -1,7 +1,7 @@
 # Lab: Networking
 
 In this lab, you will build a small webserver on the lambda server.
-The purpose is to introduce you to networking concepts that you will need for working with docker.
+The purpose is to introduce you to networking concepts that you will need for your docker hw (and eventually connecting to SQL databases).
 
 <img src=img/network-engineers.jpg width=400px />
 
@@ -45,22 +45,6 @@ And the Americans with Disabilities Act (ADA) actually requires that large compa
 The [website ada.gov provides detailed guidance](https://www.ada.gov/resources/web-guidance/#when-the-ada-requires-web-content-to-be-accessible) on exactly which companies are required by law to have accessible websites,
 and what steps web developers must take to conform to those guidelines.
 
-<!--
-### Part 0.a: Ports
-
-Run the command
-```
-$ links http://phrack.org:80
-```
-You should connect to the Phrack magazine webpage exactly like you did before.
-
-The `:80` in the url above is called the *port*.
-Every computer has 65536 (i.e. $2^{16}$) "ports" that it can use for internet connections.
-If no port is specified, then the `http://` protocol defaults to using port 80.
-
-### Part 0.b: The Lambda Server Web Server
--->
-
 Another reason to use the links browser is that we can run it on remote machines and access web servers that our laptop doesn't have direct access to.
 For example, run the command
 ```
@@ -71,17 +55,10 @@ But now visit the same url <http://10.253.1.15:5000> in firefox on your laptop.
 You should get an error about being unable to connect.
 This webpage is internal to the CMC network, and IT has created firewall rules that prevent outsiders from viewing it.
 
-> **Aside:**
-> The GNU Project argues that Google Chrome and Apple Safari are malware.
-> Google and Apple censor what you can see online, spy on the websites you visit, report "bad" websites to authoritarian governments, and provide backdoors for other people to use your computer.
-> GNU maintains a [detailed list of infractions for Google here](https://www.gnu.org/proprietary/malware-google.en.html) and for [Apple here](https://www.gnu.org/proprietary/malware-apple.en.html).
-> For this reason, I use firefox to browse the web.
-> I also recommend the [ublockorigin](https://ublockorigin.com/) adblocker.
-
 Before we learn how to bypass this firewall, it will be useful to review some basic networking.
 In the url above, 
 the `http://` is called the *scheme*,
-and this identifies that you are connecting to a webserver (and not, e.g. a ssh server).
+and this identifies that you are connecting to a webserver (and not, e.g. an ssh server).
 The `10.253.1.15` is called an *IP address*,
 and this identifies which computer we are connecting to.
 The `:5000` is a *port*,
@@ -89,10 +66,11 @@ and every computer has 65536 (i.e. $2^{16}$) ports that it can listen for connec
 
 > **Aside:**
 > You may never have seen a url with a port specification before.
-> This is because all schemes have default ports associated with them,
-> and if a service is hosted on the default port,
-> then no port is needed.
+> This is because all schemes have default ports associated with them.
 > The default port for http is 80, and so the url `http://google.com` is equivalent to `http://google.com:80`.
+>
+> Only root is allowed to open ports <1024 (where most of the default ports are numbered).
+> So in this class, we won't be using any default ports and will have to manually specify the port.
 
 An IP address can host many different webservers as long as each uses a different port.
 Another webserver is listening on port 5001 of the same IP address.
@@ -106,7 +84,14 @@ And you will be greeted with an "Hola Mundo" message.
 
 [Port forwarding](https://en.wikipedia.org/wiki/Port_forwarding) is a way to connect to ports (and thus webpages) hidden behind a firewall.
 It is commonly used to bypass the [Great Firewall of China](https://en.wikipedia.org/wiki/Great_Firewall) and other forms of censorship.
-You will use it in order to view the webpage <http://10.253.1.15:5000> directly on your laptop in firefox.
+You will use it in order to view the webpage <http://10.253.1.15:5000> directly on your laptop in your web browser.
+
+> **Aside:**
+> The GNU Project argues that Google Chrome and Apple Safari are malware, especially for people who live in "authoritarian" countries.
+> Google and Apple censor what you can see online, spy on the websites you visit, report "bad" websites to authoritarian governments, and provide backdoors for other people to use your computer without authorization.
+> GNU maintains a [detailed list of infractions for Google here](https://www.gnu.org/proprietary/malware-google.en.html) and for [Apple here](https://www.gnu.org/proprietary/malware-apple.en.html).
+> For this reason, I use firefox to browse the web.
+> I also recommend the [ublockorigin](https://ublockorigin.com/) adblocker.
 
 You enable port forwarding by modifying the `ssh` command you use to connect to the lambda server.
 Log out, then re-login with the command
@@ -131,6 +116,8 @@ We will be using many different web services in this course,
 and you will need to be an expert in port forwarding in order to get them to talk to each other correctly.
 
 ### Part 2.a: `netcat` basics
+
+<img src=img/netcat.jpg width=300px />
 
 The `netcat` command can be used to send messages over the network.
 (You should think of `netcat` as like `cat`, but for the network instead of files.)
@@ -179,13 +166,13 @@ You will now need a partner to continue with this lab.
 
 In order to create a web server, you will need to select a port that no one else is using.
 The simplest way of doing that is to use your user id as the port number.
-The user id is stored in the `$UID` variable of the shell and you can access it with the command
+You can get your user id with the following command
 ```
-$ echo $UID
+$ id -u
 ```
 Then, you can start a server with the command
 ```
-$ netcat -l localhost $UID
+$ netcat -l localhost $(id -u)
 ```
 In a separate terminal window, use netcat to connect to your partner's server by running the command
 ```
@@ -226,7 +213,12 @@ Create another file `server.sh` with the following contents.
 ```
 #!/bin/sh
 while true; do
-    cat index.html | netcat -q1 -l 0.0.0.0 $UID
+    netcat -q1 -l 0.0.0.0 $(id -u) <<EOF
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+$(cat index.html)
+EOF
     echo "index.html served"
 done
 ```
@@ -238,14 +230,13 @@ done
 > So we just close the connection instead.
 
 > **Note:**
-> Depending on how you create/run the `server.sh` file above,
-> you may get error messages that look something like
+> The heredoc above begins with
 > ```
-> netcat: getaddrinfo: Servname not supported for ai_socktype
+> HTTP/1.1 200 OK
+> Content-Type: text/html
+> 
 > ```
-> These are caused by the `UID` variable being undefined in the context of the dash shell you are using (and so variable substitution results in an empty variable being inserted and no port being specified to the `netcat` command).
-> The `UID` variable is not a POSIX standard, and exists only in bash.
-> If you either: (1) use bash or (2) manually substitute the UID value, then this should resolve the error.
+> This is called the HTTP header, and it tells the web broser that the subsequent information is an html file (and not and image for example) that should be displayed.
 
 > **Note:**
 > Notice that the `netcat` command above uses `0.0.0.0` instead of `localhost` as the location the webserver will run from.
@@ -258,19 +249,11 @@ $ chmod u+x server.sh
 $ ./server.sh
 ```
 
-> **Note:**
-> Some web browsers may not render your `index.html` file properly because your web server above does not send the proper HTTP headers stating that the document is HTML and not plain text.
-> You can get it to render correctly by using the following variation of the `netcat` command in your script:
-> ```
-> netcat -q1 -l 0.0.0.0 $UID <<EOF
-> HTTP/1.1 200 OK
-> Content-Type: text/html
-> 
-> $(cat index.html)
-> EOF
-> ```
-
 ## Submission
 
 In order to complete this lab, you need to enable ssh port forwarding so that you are able to connect to your partner's web server from firefox on your laptop.
-Take a screenshot, and upload to sakai.
+Take a screenshot, and upload to canvas.
+
+(And try not to go insane.)
+
+<img src=img/frustrate.jpg width=300px />
