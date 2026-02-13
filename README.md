@@ -3,6 +3,8 @@
 In this lab, you will build a small webserver on the lambda server.
 The purpose is to introduce you to networking concepts that you will need for working with docker.
 
+<img src=img/network-engineer.png width=400px />
+
 Parts 0-1 of this lab don't require a partner, but part 2 will.
 I encourage you to work with a partner throughout the whole lab.
 
