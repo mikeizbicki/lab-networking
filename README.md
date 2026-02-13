@@ -195,7 +195,7 @@ Connect to your partner's listening netcat service by running
 ```
 $ netcat localhost <partner_uid>
 ```
-and observer all of the strings appear.
+and observe all of the strings appear.
 
 ### Part 2.d: The web server
 
@@ -236,7 +236,7 @@ done
 > Content-Type: text/html
 > 
 > ```
-> This is called the HTTP header, and it tells the web broser that the subsequent information is an html file (and not and image for example) that should be displayed.
+> This is called the HTTP header, and it tells the web browser that the subsequent information is an html file (and not an image for example) that should be displayed.
 
 > **Note:**
 > Notice that the `netcat` command above uses `0.0.0.0` instead of `localhost` as the location the webserver will run from.
