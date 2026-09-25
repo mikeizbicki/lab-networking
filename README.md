@@ -91,7 +91,12 @@ You will use it in order to view the webpage <http://10.253.1.15:5000> directly 
 > Google and Apple censor what you can see online, spy on the websites you visit, report "bad" websites to authoritarian governments, and provide backdoors for other people to use your computer without authorization.
 > GNU maintains a [detailed list of infractions for Google here](https://www.gnu.org/proprietary/malware-google.en.html) and for [Apple here](https://www.gnu.org/proprietary/malware-apple.en.html).
 > For this reason, I use firefox to browse the web.
-> I also recommend the [ublockorigin](https://ublockorigin.com/) adblocker.
+> I also recommend the [ublock origin](https://ublockorigin.com/) adblocker.
+>
+> <img src=img/ublock.jpg width=300px />
+>
+> Ads are obviously annoying, but they've also [been recognized by the NSA as a national security threat](https://web.archive.org/web/20250621162625if_/https://www.nsa.gov/portals/75/documents/what-we-do/cybersecurity/professional-resources/csi-blocking-unnecessary-advertising-web-content.pdf) because they can be used to distribute malware.
+> All government employees are therefore required to use adblockers on government systems.
 
 You enable port forwarding by modifying the `ssh` command you use to connect to the lambda server.
 Log out, then re-login with the command
