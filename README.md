@@ -1,7 +1,9 @@
 # Lab: Networking
 
 In this lab, you will build a small webserver on the lambda server.
-The purpose is to introduce you to networking concepts that you will need for your docker hw (and eventually connecting to SQL databases).
+The purpose is to introduce you to networking concepts that you will need for your docker hw this week.
+In ~2 weeks we will be running remote postgres SQL servers for data analysis,
+and you'll need a good understanding of networking to be able to connect to them.
 
 <img src=img/network-engineers.jpg width=400px />
 
